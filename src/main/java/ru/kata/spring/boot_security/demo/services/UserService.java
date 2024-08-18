@@ -49,11 +49,9 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void saveUser(User user, String roleName) {
+    public void saveUser(User user) {
         if (user.getId() == 0 || !userRepository.findById(user.getId()).get().getPassword().equals(user.getPassword()))
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role role = roleService.findByName(roleName);
-        user.setRoles(Collections.singletonList(role));
         userRepository.save(user);
     }
 

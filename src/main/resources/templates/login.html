@@ -1,41 +1,36 @@
-<!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="index, follow">
+    <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
-          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
-    <!-- Favicons -->
-    <link rel="apple-touch-icon" href="https://static-00.iconduck.com/assets.00/spring-icon-2048x2045-yufnoc34.png" sizes="180x180">
-    <link rel="icon" href="https://static-00.iconduck.com/assets.00/spring-icon-2048x2045-yufnoc34.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="https://static-00.iconduck.com/assets.00/spring-icon-2048x2045-yufnoc34.png" sizes="16x16" type="image/png">
-    <link rel="icon" href="https://static-00.iconduck.com/assets.00/spring-icon-2048x2045-yufnoc34.png">
-    <meta name="theme-color" content="#7952b3">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-<body>
-<div class="container">
-    <div class="row">
-        <div class="col-4 mx-auto mt-5">
-            <form class="form-horizontal" role="form" method="POST" action="/process_login">
-                <h3 class="mb-2 text-left font-weight-bold">Please sign in</h3>
+</head>
 
-                <div class="form-floating">
-                    <input type="text" class="form-control mt-0 mb-0" name="username" id="username" placeholder="Username"
-                           style="height: 50px">
-                    <input type="password" class="form-control mt-0 mb-0" name="password" id="password"
-                           placeholder="Password" style="height: 50px">
-                </div>
-                <button class="w-100 btn btn-lg btn-primary mt-2" type="submit">Sign in</button>
-                <div th:if="${param.error}" style="color: red">
-                    Incorrect Username or Password
-                </div>
-            </form>
-        </div>
-    </div>
+<body class="pt-5">
+
+<div class="col-3 mx-auto">
+
+    <main>
+        <form class="form-horizontal" role="form" method="POST" action="/process_login">
+            <h1 class="h3 mb-3 fw-bold text-left">Please sign in</h1>
+
+            <div class="form-floating">
+                <input type="text" class="form-control" name="username" id="floatingInput" placeholder="username" style="height: 40px">
+                <label for="floatingInput" class="text-muted d-flex align-items-center">Username</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control d-flex align-items-center" name="password" id="floatingPassword" placeholder="Password" style="height: 40px">
+                <label for="floatingPassword" class="text-muted d-flex align-items-center">Password</label>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary mt-2" type="submit">Sign in</button>
+            <div th:if="${param.error}" style="color: red">
+                Incorrect Username or Password
+            </div>
+        </form>
+    </main>
 </div>
+
 
 </body>
 </html>

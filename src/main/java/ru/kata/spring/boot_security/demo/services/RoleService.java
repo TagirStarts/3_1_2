@@ -22,7 +22,9 @@ public class RoleService {
         return roleRepository.findAll();
     }
 
-    public Role findByName(String name) {
-        return roleRepository.findByName(name);
+    @Transactional(readOnly = true)
+    public Role findById(Long id) {
+        return roleRepository.findById(id).orElse(null);
     }
+
 }

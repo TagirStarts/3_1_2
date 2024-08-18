@@ -1,21 +1,14 @@
 package ru.kata.spring.boot_security.demo.entity;
 
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
-import javax.persistence.ManyToMany;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Max;
 
@@ -29,22 +22,20 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(unique = true)
-    @Size(min = 2, max = 100, message = "Username must be min 2 and max 100 symbols")
     @NotBlank(message = "Username is required field")
+    @Size(min = 2, max = 100, message = "Username must be min 2 and max 100 symbols")
     private String username;
     @Column
     @NotBlank(message = "Password is required field")
     @Size(min = 4, message = "Password must be min 4 symbols")
     private String password;
     @Column
-    @Size(min = 2, max = 100, message = "Name must be min 2 and max 100 symbols")
     @NotBlank(message = "Name is required field")
-    @Pattern(regexp = "[A-Za-z]+", message = "Name must consist only letters")
+    @Size(min = 2, max = 100, message = "Name must be min 2 and max 100 symbols")
     private String name;
     @Column
-    @Size(min = 2, max = 150, message = "Lastname must be min 2 and max 150 symbols")
     @NotBlank(message = "Lastname is required field")
-    @Pattern(regexp = "[A-Za-z]+", message = "Lastname must consist only letters")
+    @Size(min = 2, max = 150, message = "Lastname must be min 2 and max 150 symbols")
     private String lastname;
     @Column
     @Min(value = 1, message = "Age must be greater than 0")
@@ -67,10 +58,12 @@ public class User implements UserDetails {
 
     public User() {}
 
-    public User(String name, String lastname, int age) {
+    public User(String name, String lastname, int age, String password, String username) {
         this.name = name;
         this.lastname = lastname;
         this.age = age;
+        this.password = password;
+        this.username = username;
     }
 
     public long getId() {
@@ -109,6 +102,18 @@ public class User implements UserDetails {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -129,21 +134,9 @@ public class User implements UserDetails {
         return true;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     @Override

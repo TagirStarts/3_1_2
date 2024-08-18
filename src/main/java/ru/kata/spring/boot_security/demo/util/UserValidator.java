@@ -30,10 +30,27 @@ public class UserValidator implements Validator {
                     .get().getUsername().equals(user.getUsername())) {
                 userService.loadUserByUsername(user.getUsername());
             }
-            else return;
+            else {
+                return;
+            }
         } catch (UsernameNotFoundException e) {
             return;
         }
         errors.rejectValue("username", "", String.format("Username %s already exists", user.getUsername()));
+    }
+
+    public void validate(String username, Long id, Errors errors) {
+        try {
+            if (id == 0 || !userService.getUser(id)
+                    .get().getUsername().equals(username)) {
+                userService.loadUserByUsername(username);
+            }
+            else {
+                return;
+            }
+        } catch (UsernameNotFoundException e) {
+            return;
+        }
+        errors.rejectValue("username", "", String.format("Username %s already exists", username));
     }
 }
