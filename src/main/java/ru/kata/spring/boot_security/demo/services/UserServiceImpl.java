@@ -6,7 +6,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,16 +17,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserServiceImpl implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final RoleService roleService;
+    private final RoleServiceImpl roleServiceImpl;
 
     @Autowired
-    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, RoleService roleService) {
+    public UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, RoleServiceImpl roleServiceImpl) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
-        this.roleService = roleService;
+        this.roleServiceImpl = roleServiceImpl;
     }
 
     public User findByUsername(String username) {
@@ -49,11 +48,14 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void saveUser(User user, String roleName) {
+    public void saveUser(User user, List <String> roleNames) {
         if (user.getId() == 0 || !userRepository.findById(user.getId()).get().getPassword().equals(user.getPassword()))
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role role = roleService.findByName(roleName);
-        user.setRoles(Collections.singletonList(role));
+        Set <Role> roles = new HashSet<>();
+        for (String roleName : roleNames) {
+            roles.add(roleServiceImpl.findByName(roleName));
+        }
+        user.setRoles(roles);
         userRepository.save(user);
     }
 
