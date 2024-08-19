@@ -6,7 +6,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,16 +17,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserServiceImpl implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final RoleService roleService;
+    private final RoleServiceImpl roleServiceImpl;
 
     @Autowired
-    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, RoleService roleService) {
+    public UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, RoleServiceImpl roleServiceImpl) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
-        this.roleService = roleService;
+        this.roleServiceImpl = roleServiceImpl;
     }
 
     public User findByUsername(String username) {

@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.entity.User;
-import ru.kata.spring.boot_security.demo.services.UserService;
+import ru.kata.spring.boot_security.demo.services.UserServiceImpl;
 import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
@@ -20,24 +20,24 @@ import java.util.List;
 @RequestMapping("/api/admin")
 public class AdminController {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final UserValidator userValidator;
 
     @Autowired
-    public AdminController(UserService userService, UserValidator userValidator) {
-        this.userService = userService;
+    public AdminController(UserServiceImpl userServiceImpl, UserValidator userValidator) {
+        this.userServiceImpl = userServiceImpl;
         this.userValidator = userValidator;
     }
 
     @GetMapping
     public ResponseEntity<List<User>> allUsers(Principal principal, Model model) {
-        List<User> allUsers = userService.getAllUsers();
+        List<User> allUsers = userServiceImpl.getAllUsers();
         return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable long id) {
-        User user = userService.getUser(id).get();
+        User user = userServiceImpl.getUser(id).get();
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -49,7 +49,7 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getAllErrors());
         }
-        userService.saveUser(user);
+        userServiceImpl.saveUser(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -60,14 +60,14 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getAllErrors());
         }
-        userService.saveUser(user);
+        userServiceImpl.saveUser(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable long id) {
-        User user = userService.getUser(id).get();
-        userService.deleteUser(id);
+        User user = userServiceImpl.getUser(id).get();
+        userServiceImpl.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
